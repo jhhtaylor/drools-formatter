@@ -13,6 +13,10 @@ with the left margin. The `when` and `then` keywords also start at the left
 margin, and their contents are indented four spaces. Blocks are closed with
 `end` at column zero.
 
+Only the main structural keywords (`rule`, `when`, `then`, `end`) affect
+indentation. Other Drools keywords such as `accumulate`, `exists`, or `query`
+are formatted as normal lines inside the blocks.
+
 ## Development
 
 ```
