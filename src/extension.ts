@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 function formatDrools(text: string): string {
     const lines = text.split(/\r?\n/);
-    let indent = 0;
+    let context: 'none' | 'attr' | 'when' | 'then' = 'none';
     const formatted: string[] = [];
 
     const pad = (level: number) => '  '.repeat(Math.max(level, 0));
@@ -10,30 +10,41 @@ function formatDrools(text: string): string {
     for (const line of lines) {
         const trimmed = line.trim();
 
+        if (trimmed === '') {
+            formatted.push('');
+            continue;
+        }
+
         if (trimmed === 'end') {
-            formatted.push(pad(0) + trimmed);
-            indent = 0;
+            formatted.push('end');
+            context = 'none';
             continue;
         }
 
         if (/^rule\b/.test(trimmed)) {
             formatted.push(trimmed);
-            indent = 1;
+            context = 'attr';
             continue;
         }
 
         if (trimmed === 'when') {
-            formatted.push(pad(1) + trimmed);
-            indent = 2;
+            formatted.push('when');
+            context = 'when';
             continue;
         }
 
         if (trimmed === 'then') {
-            formatted.push(pad(1) + trimmed);
-            indent = 2;
+            formatted.push('then');
+            context = 'then';
             continue;
         }
 
+        let indent = 0;
+        if (context === 'attr') {
+            indent = 1;
+        } else if (context === 'when' || context === 'then') {
+            indent = 2;
+        }
         formatted.push(pad(indent) + trimmed);
     }
 
