@@ -7,7 +7,10 @@ VS Code extension that formats Drools (`.drl`) rule files.
 - Format the entire document with `Ctrl+Shift+I` or `Format Document` command.
 - Format the selected lines with `Ctrl+K Ctrl+F` or `Format Selection`.
 
-The formatter uses a very simple indentation algorithm that indents lines after `when` and `then` and dedents at `end`.
+The formatter follows the basic layout in the Drools reference documentation. Rule attributes
+are indented two spaces beneath the `rule` line, while conditions and actions
+under `when` and `then` are indented four spaces. Blocks are closed with `end`
+at the start of the line.
 
 ## Development
 
