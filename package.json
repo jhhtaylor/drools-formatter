@@ -1,12 +1,40 @@
 {
   "name": "drools-formatter",
   "displayName": "Drools Formatter",
-  "description": "VS Code extension that formats Drools (.drl) rule files",
+  "publisher": "jhhtaylor",
+  "author": {
+    "name": "Jon Taylor",
+    "email": "jhhtaylor@gmail.com"
+  },
+  "description": "Formats Drools (.drl) rule files in VS Code.",
+  "icon": "media/drools-formatter.png",
+  "galleryBanner": {
+    "color": "#FF914D",
+    "theme": "dark"
+  },
+  "homepage": "https://github.com/jhhtaylor/drools-formatter/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhhtaylor/drools-formatter"
+  },
+  "bugs": {
+    "url": "https://github.com/jhhtaylor/drools-formatter/issues",
+    "email": "jhhtaylor@gmail.com"
+  },
   "version": "0.0.1",
-  "publisher": "your-name",
   "engines": {
     "vscode": "^1.80.0"
   },
+  "categories": [
+    "Formatters"
+  ],
+  "keywords": [
+    "Drools",
+    "drl",
+    "rules",
+    "formatter",
+    "code style"
+  ],
   "activationEvents": [
     "onLanguage:drl"
   ],
