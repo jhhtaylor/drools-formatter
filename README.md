@@ -13,6 +13,9 @@ The formatter uses a very simple indentation algorithm that indents lines after 
 
 ```
 npm install
+npm run watch
+
+# For a single build
 npm run compile
 ```
 
