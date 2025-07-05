@@ -10,6 +10,16 @@
   "activationEvents": [
     "onLanguage:drl"
   ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "drl",
+        "aliases": ["Drools", "drools"],
+        "extensions": [".drl"],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
   "main": "./dist/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run copyfiles && npm run package",

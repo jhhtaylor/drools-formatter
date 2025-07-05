@@ -24,3 +24,4 @@ The compiled extension code is output to the `dist` folder.
 ## Usage
 
 Open a `.drl` file in VS Code and use the standard formatting commands.
+The extension registers the `drl` language, so `.drl` files are recognized automatically when the extension is installed.
