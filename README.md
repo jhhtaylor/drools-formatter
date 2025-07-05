@@ -1,6 +1,12 @@
-# Drools Formatter
+<p align="center">
+  <img src="media/drools-formatter.png" alt="Logo" width="200"/>
+</p>
 
-VS Code extension that formats Drools (`.drl`) rule files.
+Drools Formatter is VS Code extension that formats Drools (`.drl`) rule files.
+
+## Support the creator
+
+<a href="https://www.buymeacoffee.com/jhhtaylor" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="217" height="60"></a>
 
 ## Features
 
@@ -33,3 +39,7 @@ The compiled extension code is output to the `dist` folder.
 
 Open a `.drl` file in VS Code and use the standard formatting commands.
 The extension registers the `drl` language, so `.drl` files are recognized automatically when the extension is installed.
+
+## Disclaimer
+
+This extension is an independent project and is not affiliated with or endorsed by the Drools project or Red Hat. The Drools name and logo are trademarks of their respective owners; use here is for identification purposes only.
