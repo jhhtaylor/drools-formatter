@@ -40,9 +40,7 @@ function formatDrools(text: string): string {
         }
 
         let indent = 0;
-        if (context === 'attr') {
-            indent = 1;
-        } else if (context === 'when' || context === 'then') {
+        if (context === 'when' || context === 'then') {
             indent = 2;
         }
         formatted.push(pad(indent) + trimmed);
