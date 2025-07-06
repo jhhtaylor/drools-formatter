@@ -7,28 +7,36 @@ export function formatDrools(text: string): string {
 
     for (const line of lines) {
         const trimmed = line.trim();
-        let collapsed = trimmed
-            .replace(/\s+/g, ' ')
-            .replace(/\s+\(/g, '(')
-            .replace(/\(\s+/g, '(')
-            .replace(/\s+\)/g, ')');
+        let collapsed = trimmed.replace(/\s+/g, ' ');
+
+        const removePreSpace = () => {
+            collapsed = collapsed.replace(/([A-Za-z0-9_])\s*\(/g, '$1(');
+        };
+
+        const addInnerSpaces = () => {
+            collapsed = collapsed
+                .replace(/([=!><&|+\-*/%])\(/g, '$1 (')
+                .replace(/\(\s*/g, '( ')
+                .replace(/\s*\)/g, ' )')
+                .replace(/\( \)/g, '()');
+        };
+
+        removePreSpace();
 
         if (context === 'when') {
-            collapsed = collapsed
-                .replace(/\(\s*/g, '(')
-                .replace(/\s*\)/g, ')')
-                .replace(/\(([^)]*)\)/g, (_, inner) => {
-                    const t = inner.trim();
-                    return t === '' ? '()' : `( ${t} )`;
-                });
+            addInnerSpaces();
         } else if (context === 'then') {
             const keywords = ['update', 'insert', 'insertLogical', 'delete', 'retract', 'modify'];
             const start = collapsed.trimStart();
             if (keywords.some(k => start.startsWith(k + '('))) {
-                collapsed = collapsed.replace(/\s*\(\s*/g, '(').replace(/\s*\)/g, ')');
+                collapsed = collapsed
+                    .replace(/\s*\(\s*/g, '(')
+                    .replace(/\s*\)/g, ')');
             } else {
-                collapsed = collapsed.replace(/\(\s*/g, '( ').replace(/\s*\)/g, ' )');
+                collapsed = collapsed.replace(/\b(if|for|while|switch|catch)\(/g, '$1 (');
+                addInnerSpaces();
             }
+            collapsed = collapsed.replace(/\s+([;,])/g, '$1');
         }
         if (collapsed === '') {
             formatted.push('');
