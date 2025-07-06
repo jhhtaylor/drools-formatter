@@ -21,7 +21,7 @@
     "url": "https://github.com/jhhtaylor/drools-formatter/issues",
     "email": "jhhtaylor@gmail.com"
   },
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.80.0"
   },
