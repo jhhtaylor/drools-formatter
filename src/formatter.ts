@@ -7,30 +7,33 @@ export function formatDrools(text: string): string {
 
     for (const line of lines) {
         const trimmed = line.trim();
-        if (trimmed === '') {
+        const collapsed = trimmed
+            .replace(/\s+/g, ' ')
+            .replace(/\s+\(/g, '(');
+        if (collapsed === '') {
             formatted.push('');
             continue;
         }
 
-        if (trimmed === 'end') {
+        if (collapsed === 'end') {
             formatted.push('end');
             context = 'none';
             continue;
         }
 
-        if (/^rule\b/.test(trimmed)) {
-            formatted.push(trimmed);
+        if (/^rule\b/.test(collapsed)) {
+            formatted.push(collapsed);
             context = 'attr';
             continue;
         }
 
-        if (trimmed === 'when') {
+        if (collapsed === 'when') {
             formatted.push('when');
             context = 'when';
             continue;
         }
 
-        if (trimmed === 'then') {
+        if (collapsed === 'then') {
             formatted.push('then');
             context = 'then';
             continue;
@@ -40,7 +43,7 @@ export function formatDrools(text: string): string {
         if (context === 'when' || context === 'then') {
             indent = 2;
         }
-        formatted.push(pad(indent) + trimmed);
+        formatted.push(pad(indent) + collapsed);
     }
 
     return formatted.join('\n');
