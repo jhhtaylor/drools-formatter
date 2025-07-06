@@ -17,10 +17,22 @@ const actionInputs = [
     'System.out.println("Even length string: " + $s );',
     'System.out.println("Even length string: " + $s);'
 ];
-const expectedAction = 'System.out.println("Even length string: " + $s);';
+const expectedAction = 'System.out.println( "Even length string: " + $s );';
 for (const input of actionInputs) {
     const drl = ['rule "R"', 'when', '    $s : String()', 'then', `    ${input}`, 'end'].join('\n');
     const expected = ['rule "R"', 'when', '    $s : String()', 'then', `    ${expectedAction}`, 'end'].join('\n');
+    assert.strictEqual(formatDrools(drl), expected);
+}
+
+const updateInputs = [
+    'update( $app );',
+    'update($app );',
+    'update( $app);'
+];
+const expectedUpdate = 'update($app);';
+for (const input of updateInputs) {
+    const drl = ['rule "R"', 'when', '    $app : Object()', 'then', `    ${input}`, 'end'].join('\n');
+    const expected = ['rule "R"', 'when', '    $app : Object()', 'then', `    ${expectedUpdate}`, 'end'].join('\n');
     assert.strictEqual(formatDrools(drl), expected);
 }
 console.log('spacing formatting test passed');

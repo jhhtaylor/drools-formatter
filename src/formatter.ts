@@ -21,6 +21,14 @@ export function formatDrools(text: string): string {
                     const t = inner.trim();
                     return t === '' ? '()' : `( ${t} )`;
                 });
+        } else if (context === 'then') {
+            const keywords = ['update', 'insert', 'insertLogical', 'delete', 'retract', 'modify'];
+            const start = collapsed.trimStart();
+            if (keywords.some(k => start.startsWith(k + '('))) {
+                collapsed = collapsed.replace(/\s*\(\s*/g, '(').replace(/\s*\)/g, ')');
+            } else {
+                collapsed = collapsed.replace(/\(\s*/g, '( ').replace(/\s*\)/g, ' )');
+            }
         }
         if (collapsed === '') {
             formatted.push('');
