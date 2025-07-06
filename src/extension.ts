@@ -21,9 +21,11 @@ export function activate(context: vscode.ExtensionContext) {
         }
     };
 
+    const selector: vscode.DocumentSelector = { language: 'drools', scheme: 'file' };
+
     context.subscriptions.push(
-        vscode.languages.registerDocumentFormattingEditProvider('drl', formatter),
-        vscode.languages.registerDocumentRangeFormattingEditProvider('drl', rangeFormatter)
+        vscode.languages.registerDocumentFormattingEditProvider(selector, formatter),
+        vscode.languages.registerDocumentRangeFormattingEditProvider(selector, rangeFormatter)
     );
 }
 

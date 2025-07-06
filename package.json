@@ -21,7 +21,7 @@
     "url": "https://github.com/jhhtaylor/drools-formatter/issues",
     "email": "jhhtaylor@gmail.com"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -35,20 +35,18 @@
     "formatter",
     "code style"
   ],
+  "extensionDependencies": [
+    "jim-moody.drools"   
+  ],
+  "activationEvents": [
+    "onLanguage:drools"
+  ],
   "contributes": {
-    "languages": [
-      {
-        "id": "drl",
-        "aliases": [
-          "Drools",
-          "drools"
-        ],
-        "extensions": [
-          ".drl"
-        ],
-        "configuration": "./language-configuration.json"
+    "configurationDefaults": {
+      "[drools]": {
+        "editor.defaultFormatter": "jhhtaylor.drools-formatter"
       }
-    ]
+    }
   },
   "main": "./dist/extension.js",
   "scripts": {
