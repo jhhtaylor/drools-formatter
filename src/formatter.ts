@@ -9,7 +9,9 @@ export function formatDrools(text: string): string {
         const trimmed = line.trim();
         let collapsed = trimmed
             .replace(/\s+/g, ' ')
-            .replace(/\s+\(/g, '(');
+            .replace(/\s+\(/g, '(')
+            .replace(/\(\s+/g, '(')
+            .replace(/\s+\)/g, ')');
 
         if (context === 'when') {
             collapsed = collapsed
