@@ -55,4 +55,9 @@ for (const input of updateInputs) {
     const expected = ['rule "R"', 'when', '    $app : Object()', 'then', `    ${expectedUpdate}`, 'end'].join('\n');
     assert.strictEqual(formatDrools(drl), expected);
 }
+
+const constructorInput = 'alerts.add( new Alert("INFO", "System started") );';
+const newDrl = ['rule "R"', 'when', '    // Empty', 'then', `    ${constructorInput}`, 'end'].join('\n');
+const newExpected = ['rule "R"', 'when', '    // Empty', 'then', '    alerts.add( new Alert("INFO", "System started") );', 'end'].join('\n');
+assert.strictEqual(formatDrools(newDrl), newExpected);
 console.log('spacing formatting test passed');

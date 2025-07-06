@@ -16,9 +16,15 @@ export function formatDrools(text: string): string {
         const addInnerSpaces = () => {
             collapsed = collapsed
                 .replace(/([=!><&|+\-*/%])\(/g, '$1 (')
+                .replace(/\b(if|for|while|switch|catch)\(/g, '$1 (')
                 .replace(/\(\s*/g, '( ')
                 .replace(/\s*\)/g, ' )')
                 .replace(/\( \)/g, '()');
+
+            // revert spacing for constructor calls like `new Alert("msg")`
+            collapsed = collapsed
+                .replace(/\bnew\s+([A-Za-z_.$][\w.$]*)\(\s*/g, 'new $1(')
+                .replace(/(\bnew\s+[A-Za-z_.$][\w.$]*\([^)]*)\s+\)/g, '$1)');
         };
 
         removePreSpace();
@@ -33,7 +39,6 @@ export function formatDrools(text: string): string {
                     .replace(/\s*\(\s*/g, '(')
                     .replace(/\s*\)/g, ')');
             } else {
-                collapsed = collapsed.replace(/\b(if|for|while|switch|catch)\(/g, '$1 (');
                 addInnerSpaces();
             }
             collapsed = collapsed.replace(/\s+([;,])/g, '$1');
