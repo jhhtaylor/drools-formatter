@@ -7,9 +7,19 @@ export function formatDrools(text: string): string {
 
     for (const line of lines) {
         const trimmed = line.trim();
-        const collapsed = trimmed
+        let collapsed = trimmed
             .replace(/\s+/g, ' ')
             .replace(/\s+\(/g, '(');
+
+        if (context === 'when') {
+            collapsed = collapsed
+                .replace(/\(\s*/g, '(')
+                .replace(/\s*\)/g, ')')
+                .replace(/\(([^)]*)\)/g, (_, inner) => {
+                    const t = inner.trim();
+                    return t === '' ? '()' : `( ${t} )`;
+                });
+        }
         if (collapsed === '') {
             formatted.push('');
             continue;
