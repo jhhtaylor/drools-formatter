@@ -20,11 +20,6 @@ export function formatDrools(text: string): string {
                 .replace(/\(\s*/g, '( ')
                 .replace(/\s*\)/g, ' )')
                 .replace(/\( \)/g, '()');
-
-            // revert spacing for constructor calls like `new Alert("msg")`
-            collapsed = collapsed
-                .replace(/\bnew\s+([A-Za-z_.$][\w.$]*)\(\s*/g, 'new $1(')
-                .replace(/(\bnew\s+[A-Za-z_.$][\w.$]*\([^)]*)\s+\)/g, '$1)');
         };
 
         removePreSpace();
