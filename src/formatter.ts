@@ -4,6 +4,7 @@ export function formatDrools(text: string): string {
     const formatted: string[] = [];
 
     const pad = (level: number) => '  '.repeat(Math.max(level, 0));
+    let braceLevel = 0;
 
     for (const line of lines) {
         const trimmed = line.trim();
@@ -46,6 +47,7 @@ export function formatDrools(text: string): string {
         if (collapsed === 'end') {
             formatted.push('end');
             context = 'none';
+            braceLevel = 0;
             continue;
         }
 
@@ -67,11 +69,15 @@ export function formatDrools(text: string): string {
             continue;
         }
 
-        let indent = 0;
-        if (context === 'when' || context === 'then') {
-            indent = 2;
-        }
-        formatted.push(pad(indent) + collapsed);
+        const base = (context === 'when' || context === 'then') ? 2 : 0;
+        const leadingClose = collapsed.trimStart().startsWith('}') ? 1 : 0;
+        let indentLevel = braceLevel - leadingClose;
+        if (indentLevel < 0) indentLevel = 0;
+        formatted.push(pad(base + indentLevel) + collapsed);
+
+        const openCount = (collapsed.match(/{/g) || []).length;
+        const closeCount = (collapsed.match(/}/g) || []).length;
+        braceLevel += openCount - closeCount;
     }
 
     return formatted.join('\n');
