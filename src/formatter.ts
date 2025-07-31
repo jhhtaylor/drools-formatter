@@ -75,6 +75,9 @@ export function formatDrools(text: string): string {
         }
 
         let indent = blockIndent;
+        if (context === 'attr') {
+            indent += 1;
+        }
         if (context === 'when' || context === 'then') {
             indent += 2;
         }
