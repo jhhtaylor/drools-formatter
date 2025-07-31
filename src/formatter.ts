@@ -1,7 +1,8 @@
 export function formatDrools(text: string): string {
     const lines = text.split(/\r?\n/);
-    let context: 'none' | 'attr' | 'when' | 'then' = 'none';
+    let context: 'none' | 'attr' | 'when' | 'then' | 'query' = 'none';
     const formatted: string[] = [];
+    let blockIndent = 0;
 
     const pad = (level: number) => '  '.repeat(Math.max(level, 0));
 
@@ -24,8 +25,9 @@ export function formatDrools(text: string): string {
 
         removePreSpace();
 
-        if (context === 'when') {
+        if (context === 'when' || context === 'query') {
             addInnerSpaces();
+            collapsed = collapsed.replace(/\bnew\s+([A-Za-z0-9_.<>$]+)\(\s*([^)]*?)\s*\)/g, (m, cls, args) => `new ${cls}(${args.trim()})`);
         } else if (context === 'then') {
             const keywords = ['update', 'insert', 'insertLogical', 'delete', 'retract', 'modify'];
             const start = collapsed.trimStart();
@@ -37,6 +39,7 @@ export function formatDrools(text: string): string {
                 addInnerSpaces();
             }
             collapsed = collapsed.replace(/\s+([;,])/g, '$1');
+            collapsed = collapsed.replace(/\bnew\s+([A-Za-z0-9_.<>$]+)\(\s*([^)]*?)\s*\)/g, (m, cls, args) => `new ${cls}(${args.trim()})`);
         }
         if (collapsed === '') {
             formatted.push('');
@@ -55,23 +58,44 @@ export function formatDrools(text: string): string {
             continue;
         }
 
+        if (/^query\b/.test(collapsed)) {
+            formatted.push(collapsed);
+            context = 'query';
+            continue;
+        }
+
         if (collapsed === 'when') {
-            formatted.push('when');
+            formatted.push(pad(blockIndent + 1) + 'when');
             context = 'when';
             continue;
         }
 
         if (collapsed === 'then') {
-            formatted.push('then');
+            formatted.push(pad(blockIndent + 1) + 'then');
             context = 'then';
             continue;
         }
 
-        let indent = 0;
-        if (context === 'when' || context === 'then') {
-            indent = 2;
+        if (trimmed.startsWith('}')) {
+            blockIndent = Math.max(blockIndent - 1, 0);
         }
+
+        let indent = blockIndent;
+        if (context === 'attr') {
+            indent += 1;
+        }
+        if (context === 'when' || context === 'then') {
+            indent += 2;
+        }
+        if (context === 'query') {
+            indent += 2;
+        }
+
         formatted.push(pad(indent) + collapsed);
+
+        if (trimmed.endsWith('{')) {
+            blockIndent++;
+        }
     }
 
     return formatted.join('\n');
