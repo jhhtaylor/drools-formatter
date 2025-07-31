@@ -12,6 +12,15 @@ const input = [
     'end'
 ].join('\n');
 
-const expected = input;
+const expected = [
+    'rule "R"',
+    '  when',
+    '    true',
+    '    false',
+    '    null',
+    '  then',
+    '    exists',
+    'end'
+].join('\n');
 assert.strictEqual(formatDrools(input), expected);
 console.log('keyword formatting test passed');
