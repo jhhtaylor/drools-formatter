@@ -2,6 +2,7 @@ export function formatDrools(text: string): string {
     const lines = text.split(/\r?\n/);
     let context: 'none' | 'attr' | 'when' | 'then' = 'none';
     const formatted: string[] = [];
+    let blockIndent = 0;
 
     const pad = (level: number) => '  '.repeat(Math.max(level, 0));
 
@@ -26,6 +27,7 @@ export function formatDrools(text: string): string {
 
         if (context === 'when') {
             addInnerSpaces();
+            collapsed = collapsed.replace(/\bnew\s+([A-Za-z0-9_.<>$]+)\(\s*([^)]*?)\s*\)/g, (m, cls, args) => `new ${cls}(${args.trim()})`);
         } else if (context === 'then') {
             const keywords = ['update', 'insert', 'insertLogical', 'delete', 'retract', 'modify'];
             const start = collapsed.trimStart();
@@ -37,6 +39,7 @@ export function formatDrools(text: string): string {
                 addInnerSpaces();
             }
             collapsed = collapsed.replace(/\s+([;,])/g, '$1');
+            collapsed = collapsed.replace(/\bnew\s+([A-Za-z0-9_.<>$]+)\(\s*([^)]*?)\s*\)/g, (m, cls, args) => `new ${cls}(${args.trim()})`);
         }
         if (collapsed === '') {
             formatted.push('');
@@ -67,11 +70,20 @@ export function formatDrools(text: string): string {
             continue;
         }
 
-        let indent = 0;
-        if (context === 'when' || context === 'then') {
-            indent = 2;
+        if (trimmed.startsWith('}')) {
+            blockIndent = Math.max(blockIndent - 1, 0);
         }
+
+        let indent = blockIndent;
+        if (context === 'when' || context === 'then') {
+            indent += 2;
+        }
+
         formatted.push(pad(indent) + collapsed);
+
+        if (trimmed.endsWith('{')) {
+            blockIndent++;
+        }
     }
 
     return formatted.join('\n');
