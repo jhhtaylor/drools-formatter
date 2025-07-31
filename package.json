@@ -58,7 +58,7 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "echo no-lint",
-    "test": "node ./out/test/keywords.test.js"
+    "test": "node ./out/test/keywords.test.js && node ./out/test/spacing.test.js && node ./out/test/attributes.test.js && node ./out/test/query.test.js"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
