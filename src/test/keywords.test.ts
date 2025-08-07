@@ -14,12 +14,12 @@ const input = [
 
 const expected = [
     'rule "R"',
-    '  when',
-    '    true',
-    '    false',
-    '    null',
-    '  then',
-    '    exists',
+    'when',
+    '  true',
+    '  false',
+    '  null',
+    'then',
+    '  exists',
     'end'
 ].join('\n');
 assert.strictEqual(formatDrools(input), expected);

@@ -15,9 +15,9 @@ const expected = [
     'rule "R"',
     '  dialect "mvel"',
     '  salience 10',
-    '  when',
-    '    $s : String()',
-    '  then',
+    'when',
+    '  $s : String()',
+    'then',
     'end'
 ].join('\n');
 

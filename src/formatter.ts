@@ -1,10 +1,18 @@
-export function formatDrools(text: string): string {
+export interface FormattingOptions {
+    insertSpaces: boolean;
+    tabSize: number;
+}
+
+export function formatDrools(text: string, options?: FormattingOptions): string {
     const lines = text.split(/\r?\n/);
     let context: 'none' | 'attr' | 'when' | 'then' | 'query' = 'none';
     const formatted: string[] = [];
     let blockIndent = 0;
 
-    const pad = (level: number) => '  '.repeat(Math.max(level, 0));
+    const insertSpaces = options?.insertSpaces !== undefined ? options.insertSpaces : true;
+    const tabSize = Math.min(Math.max(options?.tabSize ?? 2, 1), 8);
+    const indentUnit = insertSpaces ? ' '.repeat(tabSize) : '\t';
+    const pad = (level: number) => indentUnit.repeat(Math.max(level, 0));
 
     for (const line of lines) {
         const trimmed = line.trim();
@@ -65,13 +73,13 @@ export function formatDrools(text: string): string {
         }
 
         if (collapsed === 'when') {
-            formatted.push(pad(blockIndent + 1) + 'when');
+            formatted.push(pad(blockIndent) + 'when');
             context = 'when';
             continue;
         }
 
         if (collapsed === 'then') {
-            formatted.push(pad(blockIndent + 1) + 'then');
+            formatted.push(pad(blockIndent) + 'then');
             context = 'then';
             continue;
         }
@@ -85,10 +93,10 @@ export function formatDrools(text: string): string {
             indent += 1;
         }
         if (context === 'when' || context === 'then') {
-            indent += 2;
+            indent += 1;
         }
         if (context === 'query') {
-            indent += 2;
+            indent += 1;
         }
 
         formatted.push(pad(indent) + collapsed);

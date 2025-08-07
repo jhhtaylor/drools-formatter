@@ -9,7 +9,7 @@ const input = [
 
 const expected = [
     'query adults',
-    '    $p : Person( age>=18 )',
+    '  $p : Person( age>=18 )',
     'end'
 ].join('\n');
 

@@ -18,8 +18,9 @@ Drools Formatter is VS Code extension that formats Drools (`.drl`) rule files.
 The formatter follows the basic layout in the Drools reference documentation. Lines
 beginning with `rule`, rule attributes such as `dialect`, and `end` are flush
 with the left margin. The `when` and `then` keywords also start at the left
-margin, and their contents are indented four spaces. Blocks are closed with
-`end` at column zero.
+margin, and their contents are indented based on your editor preferences—use
+tabs or select between one and eight spaces. Blocks are closed with `end` at
+column zero.
 
 Only the main structural keywords (`rule`, `when`, `then`, `end`) affect
 indentation. Other Drools keywords such as `accumulate`, `exists`, or `query`
