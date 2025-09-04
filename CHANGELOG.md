@@ -2,6 +2,10 @@
 
 All notable changes to the Drools Formatter extension will be documented in this file.
 
+## [0.1.2]
+
+- Removed the unsupported jim-moody.drools dependency from the extension manifest so the package can publish without unresolved dependencies
+
 ## [0.1.1]
 
 - Respect VS Code editor settings for indentation, allowing tabs or configurable
