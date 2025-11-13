@@ -3,3 +3,6 @@ dist/
 out/
 package-lock.json
 .vscode-test/
+
+# Built Visual Studio Code Extensions
+*.vsix
