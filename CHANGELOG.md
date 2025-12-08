@@ -2,7 +2,7 @@
 
 All notable changes to the Drools Formatter extension will be documented in this file.
 
-## [0.1.2]
+## [0.1.2  - 0.1.3]
 
 - Removed the unsupported jim-moody.drools dependency from the extension manifest so the package can publish without unresolved dependencies
 

@@ -21,7 +21,10 @@
     "url": "https://github.com/jhhtaylor/drools-formatter/issues",
     "email": "jhhtaylor@gmail.com"
   },
-  "version": "0.1.2",
+  "sponsor": {
+    "url": "https://www.buymeacoffee.com/jhhtaylor"
+  },
+  "version": "0.2.3",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -38,7 +41,15 @@
   "activationEvents": [
     "onLanguage:drools"
   ],
-  "contributes": {
+"contributes": {
+    "languages": [
+      {
+        "id": "drools",
+        "aliases": ["Drools", "drools"],
+        "extensions": [".drl"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
     "configuration": {
       "title": "Drools Formatter",
       "properties": {
