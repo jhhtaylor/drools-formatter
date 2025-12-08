@@ -2,6 +2,12 @@
 
 All notable changes to the Drools Formatter extension will be documented in this file.
 
+## [0.2.3] - 2025-12-08
+
+### Added
+- Sponsor link in package.json and marketplace page
+- Support message in README.md
+
 ## [0.1.2  - 0.1.3]
 
 - Removed the unsupported jim-moody.drools dependency from the extension manifest so the package can publish without unresolved dependencies
