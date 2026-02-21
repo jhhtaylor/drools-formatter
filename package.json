@@ -41,12 +41,17 @@
   "activationEvents": [
     "onLanguage:drools"
   ],
-"contributes": {
+  "contributes": {
     "languages": [
       {
         "id": "drools",
-        "aliases": ["Drools", "drools"],
-        "extensions": [".drl"],
+        "aliases": [
+          "Drools",
+          "drools"
+        ],
+        "extensions": [
+          ".drl"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -79,6 +84,9 @@
     }
   },
   "main": "./dist/extension.js",
+  "bin": {
+    "drools-fmt": "./dist/cli.js"
+  },
   "scripts": {
     "vscode:prepublish": "npm run package",
     "compile": "npx webpack",
@@ -88,11 +96,13 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "echo no-lint",
-    "test": "node ./out/test/keywords.test.js && node ./out/test/spacing.test.js && node ./out/test/attributes.test.js && node ./out/test/query.test.js && node ./out/test/indentation.test.js"
+    "test": "node ./out/test/keywords.test.js && node ./out/test/spacing.test.js && node ./out/test/attributes.test.js && node ./out/test/query.test.js && node ./out/test/indentation.test.js",
+    "build:cli": "esbuild src/cli.ts --bundle --platform=node --outfile=dist/cli.js"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
     "@types/vscode": "^1.80.0",
+    "esbuild": "^0.27.3",
     "eslint": "^8.57.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.8.3",
