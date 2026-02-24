@@ -45,6 +45,22 @@ The compiled extension code is output to the `dist` folder.
 Open a `.drl` file in VS Code and use the standard formatting commands.
 The extension registers the `drl` language, so `.drl` files are recognized automatically when the extension is installed.
 
+## CLI Tool
+
+You can also use the formatter directly from the CLI.
+You can install it globally like this:
+
+```
+npm install
+npm run build:cli
+npm install -g .
+```
+
+You can now use `drools-fmt` from anywhere, to see its usage instructions run:
+```
+drools-fmt -h
+```
+
 ## Disclaimer
 
 This extension is an independent project and is not affiliated with or endorsed by the Drools project or Red Hat. The Drools name and logo are trademarks of their respective owners; use here is for identification purposes only.
