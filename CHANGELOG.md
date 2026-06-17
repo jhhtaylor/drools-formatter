@@ -2,6 +2,22 @@
 
 All notable changes to the Drools Formatter extension will be documented in this file.
 
+## [0.3.0] - 2026-06-17
+
+### Added
+- Operator spacing in `when`/`query` constraints (`age>=18` is now formatted as `age >= 18`)
+- Binding colon normalization (`$p:Person()` becomes `$p : Person()`)
+- Comma spacing in constraints (`age > 50,weight > 80` becomes `age > 50, weight > 80`)
+- `function` block support with proper body indentation
+- `declare` block support with indented fields and annotations
+- `modify` block formatting with inner spaces (distinct from compact `update`/`insert` style)
+- DRL keyword spacing for `not`, `exists`, `forall`, `accumulate`, `collect`, `eval` (`not(X)` becomes `not (X)`)
+- Top-level construct handling (`package`, `import`, `global` always at zero indent)
+- Comment preservation — `//` and `/* */` content is no longer modified by spacing rules
+- Consecutive blank line collapsing
+- Recognition of all standard rule attributes (`no-loop`, `lock-on-active`, `agenda-group`, etc.)
+- Nine new test suites covering all additions
+
 ## [0.2.3] - 2025-12-08
 
 ### Added

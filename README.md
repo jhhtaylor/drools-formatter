@@ -17,16 +17,29 @@ Love this extension? You can support its development with a small donation - com
 - Format the entire document with `Ctrl+Shift+I` or `Format Document` command.
 - Format the selected lines with `Ctrl+K Ctrl+F` or `Format Selection`.
 
-The formatter follows the basic layout in the Drools reference documentation. Lines
-beginning with `rule`, rule attributes such as `dialect`, and `end` are flush
-with the left margin. The `when` and `then` keywords also start at the left
-margin, and their contents are indented based on your editor preferences—use
-tabs or select between one and eight spaces. Blocks are closed with `end` at
-column zero.
+The formatter follows the layout conventions in the
+[Drools language reference](https://docs.drools.org/latest/drools-docs/drools/language-reference/index.html).
+Top-level declarations (`package`, `import`, `global`) stay at the left margin.
+`rule`, `query`, `declare`, and `function` blocks are recognized, with their
+contents indented based on your editor preferences—use tabs or select between
+one and eight spaces.
 
-Only the main structural keywords (`rule`, `when`, `then`, `end`) affect
-indentation. Other Drools keywords such as `accumulate`, `exists`, or `query`
-are formatted as normal lines inside the blocks.
+Inside `when`/`query` blocks the formatter:
+
+- Adds inner spaces to constraint parentheses: `Person( age >= 18 )`
+- Normalizes operator spacing: `age>=18` becomes `age >= 18`
+- Normalizes binding colons: `$p:Person()` becomes `$p : Person()`
+- Ensures comma spacing: `age > 50,weight > 80` becomes `age > 50, weight > 80`
+- Adds a space after DRL keywords: `not(X)` becomes `not (X)` (also `exists`, `forall`, `accumulate`, `collect`, `eval`)
+
+Inside `then` blocks:
+
+- Action keywords (`update`, `insert`, `delete`, `retract`) use compact parens: `update($p);`
+- `modify` blocks get inner spaces and proper brace indentation
+- Constructor calls preserve compact parens: `new Alert("INFO", "msg")`
+
+Comments (`//` and `/* */`) are indented but their content is never modified.
+Consecutive blank lines are collapsed to one.
 
 ## Development
 
