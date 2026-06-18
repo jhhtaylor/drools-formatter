@@ -20,7 +20,8 @@ All notable changes to the Drools Formatter extension will be documented in this
 - Method chain (`.method()`) continuation indentation in `then` blocks
 - Nested-parenthesis-aware constructor formatting (`new Foo($x.getBar())` stays compact)
 - Closing `)` on its own line aligns with the opening pattern, not the continuation level
-- Twelve new test suites covering all additions
+- Thirteen new test suites covering all additions, including production DRL pattern validation
+- Removed redundant `onLanguage:drools` activation event (VS Code auto-generates it)
 
 ## [0.2.3] - 2025-12-08
 

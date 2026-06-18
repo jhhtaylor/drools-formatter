@@ -2,7 +2,7 @@
   <img src="media/drools-formatter.png" alt="Logo" width="200"/>
 </p>
 
-Drools Formatter is VS Code extension that formats Drools (`.drl`) rule files.
+Drools Formatter is a VS Code extension that formats Drools (`.drl`) rule files.
 
 ![Drools Formatter in action](media/drools-formatter-demo.gif)
 
