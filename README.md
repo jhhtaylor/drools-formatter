@@ -19,7 +19,7 @@ Love this extension? You can support its development with a small donation - com
 
 The formatter follows the layout conventions in the
 [Drools language reference](https://docs.drools.org/latest/drools-docs/drools/language-reference/index.html).
-Top-level declarations (`package`, `import`, `global`) stay at the left margin.
+Top-level declarations (`package`, `unit`, `import`, `global`) stay at the left margin.
 `rule`, `query`, `declare`, and `function` blocks are recognized, with their
 contents indented based on your editor preferences—use tabs or select between
 one and eight spaces.
@@ -31,12 +31,15 @@ Inside `when`/`query` blocks the formatter:
 - Normalizes binding colons: `$p:Person()` becomes `$p : Person()`
 - Ensures comma spacing: `age > 50,weight > 80` becomes `age > 50, weight > 80`
 - Adds a space after DRL keywords: `not(X)` becomes `not (X)` (also `exists`, `forall`, `accumulate`, `collect`, `eval`)
+- Indents continuation lines inside multi-line patterns
 
 Inside `then` blocks:
 
 - Action keywords (`update`, `insert`, `delete`, `retract`) use compact parens: `update($p);`
 - `modify` blocks get inner spaces and proper brace indentation
 - Constructor calls preserve compact parens: `new Alert("INFO", "msg")`
+- Method chain continuations (`.filter()`, `.map()`, etc.) are indented
+- Multi-line argument lists are indented to match their nesting depth
 
 Comments (`//` and `/* */`) are indented but their content is never modified.
 Consecutive blank lines are collapsed to one.

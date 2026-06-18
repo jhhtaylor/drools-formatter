@@ -5,7 +5,7 @@ export interface FormattingOptions {
 
 type Context = 'none' | 'attr' | 'when' | 'then' | 'query' | 'function' | 'declare';
 
-const TOP_LEVEL_RE = /^(package|import|global)\b/;
+const TOP_LEVEL_RE = /^(package|unit|import|global)\b/;
 
 const RULE_ATTRIBUTES = [
     'salience', 'enabled', 'no-loop', 'lock-on-active', 'auto-focus',
@@ -20,6 +20,56 @@ const PAREN_KEYWORD_RE = new RegExp('\\b(' + ALL_PAREN_KEYWORDS.join('|') + ')\\
 
 const THEN_COMPACT_KEYWORDS = ['update', 'insert', 'insertLogical', 'delete', 'retract'];
 
+function countOutsideStrings(line: string, open: string, close: string): { opens: number; closes: number } {
+    let opens = 0;
+    let closes = 0;
+    let inStr: string | null = null;
+    let escaped = false;
+    for (const ch of line) {
+        if (escaped) { escaped = false; continue; }
+        if (ch === '\\') { escaped = true; continue; }
+        if (inStr) {
+            if (ch === inStr) inStr = null;
+            continue;
+        }
+        if (ch === '"' || ch === "'") { inStr = ch; continue; }
+        if (ch === open) opens++;
+        if (ch === close) closes++;
+    }
+    return { opens, closes };
+}
+
+function stripNewConstructor(line: string): string {
+    const re = /\bnew\s+([A-Za-z0-9_.<>$]+)\(/g;
+    let result = line;
+    let match;
+    while ((match = re.exec(result)) !== null) {
+        const start = match.index;
+        const argsStart = start + match[0].length;
+        let depth = 1;
+        let i = argsStart;
+        let inStr: string | null = null;
+        let escaped = false;
+        while (i < result.length && depth > 0) {
+            const ch = result[i];
+            if (escaped) { escaped = false; i++; continue; }
+            if (ch === '\\') { escaped = true; i++; continue; }
+            if (inStr) { if (ch === inStr) inStr = null; i++; continue; }
+            if (ch === '"' || ch === "'") { inStr = ch; i++; continue; }
+            if (ch === '(') depth++;
+            if (ch === ')') depth--;
+            i++;
+        }
+        if (depth === 0) {
+            const innerContent = result.substring(argsStart, i - 1).trim();
+            const replacement = `new ${match[1]}(${innerContent})`;
+            result = result.substring(0, start) + replacement + result.substring(i);
+            re.lastIndex = start + replacement.length;
+        }
+    }
+    return result;
+}
+
 export function formatDrools(text: string, options?: FormattingOptions): string {
     const lines = text.split(/\r?\n/);
     let context: Context = 'none';
@@ -27,6 +77,7 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
     let blockIndent = 0;
     let inBlockComment = false;
     let funcBraceDepth = 0;
+    let parenDepth = 0;
 
     const insertSpaces = options?.insertSpaces !== undefined ? options.insertSpaces : true;
     const tabSize = Math.min(Math.max(options?.tabSize ?? 2, 1), 8);
@@ -56,6 +107,12 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
             if (context === 'attr' || context === 'when' || context === 'then' || context === 'query' || context === 'declare') {
                 indent += 1;
             }
+            if ((context === 'when' || context === 'query') && parenDepth > 0) {
+                indent += parenDepth;
+            }
+            if (context === 'then' && parenDepth > 0) {
+                indent += parenDepth;
+            }
             formatted.push(pad(indent) + trimmed);
             continue;
         }
@@ -80,6 +137,7 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
             formatted.push('end');
             if (context === 'declare' || context === 'query' || context === 'then' || context === 'when' || context === 'attr') {
                 context = 'none';
+                parenDepth = 0;
             }
             continue;
         }
@@ -88,6 +146,7 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
         if (/^rule\b/.test(collapsed)) {
             formatted.push(collapsed);
             context = 'attr';
+            parenDepth = 0;
             continue;
         }
 
@@ -95,6 +154,7 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
         if (/^query\b/.test(collapsed)) {
             formatted.push(collapsed);
             context = 'query';
+            parenDepth = 0;
             continue;
         }
 
@@ -111,10 +171,8 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
             funcBraceDepth = 0;
             if (collapsed.includes('{')) {
                 funcBraceDepth = 1;
-                formatted.push(collapsed);
-            } else {
-                formatted.push(collapsed);
             }
+            formatted.push(collapsed);
             continue;
         }
 
@@ -122,12 +180,14 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
         if (collapsed === 'when' && (context === 'attr' || context === 'none')) {
             formatted.push(pad(blockIndent) + 'when');
             context = 'when';
+            parenDepth = 0;
             continue;
         }
 
         if (collapsed === 'then' && (context === 'when' || context === 'none')) {
             formatted.push(pad(blockIndent) + 'then');
             context = 'then';
+            parenDepth = 0;
             continue;
         }
 
@@ -202,7 +262,7 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
             addInnerSpaces();
             normalizeCommaSpacing();
             spaceOperators();
-            collapsed = collapsed.replace(/\bnew\s+([A-Za-z0-9_.<>$]+)\(\s*([^)]*?)\s*\)/g, (m, cls, args) => `new ${cls}(${args.trim()})`);
+            collapsed = stripNewConstructor(collapsed);
         } else if (context === 'then') {
             const start = collapsed.trimStart();
             const isModifyBlock = start.startsWith('modify(') || start.startsWith('modify (');
@@ -215,7 +275,18 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
             }
             normalizeCommaSpacing();
             collapsed = collapsed.replace(/\s+([;,])/g, '$1');
-            collapsed = collapsed.replace(/\bnew\s+([A-Za-z0-9_.<>$]+)\(\s*([^)]*?)\s*\)/g, (m, cls, args) => `new ${cls}(${args.trim()})`);
+            collapsed = stripNewConstructor(collapsed);
+        }
+
+        // --- Paren depth tracking for continuation lines ---
+        const parens = countOutsideStrings(collapsed, '(', ')');
+
+        // Closing paren on its own line: dedent to match opener level and strip leading space
+        if (trimmed.startsWith(')') && (context === 'when' || context === 'query' || context === 'then')) {
+            if (parenDepth > 0) {
+                parenDepth = Math.max(parenDepth - 1, 0);
+            }
+            collapsed = collapsed.replace(/^\s+/, '');
         }
 
         // --- Indentation ---
@@ -234,10 +305,26 @@ export function formatDrools(text: string, options?: FormattingOptions): string 
             indent += 1;
         }
 
+        if ((context === 'when' || context === 'query') && parenDepth > 0) {
+            indent += parenDepth;
+        }
+
+        if (context === 'then') {
+            if (parenDepth > 0) {
+                indent += parenDepth;
+            } else if (collapsed.startsWith('.')) {
+                indent += 1;
+            }
+        }
+
         formatted.push((pad(indent) + collapsed).trimEnd());
 
         if (trimmed.endsWith('{')) {
             blockIndent++;
+        }
+
+        if (context === 'when' || context === 'query' || context === 'then') {
+            parenDepth = Math.max(parenDepth + parens.opens - parens.closes, 0);
         }
     }
 

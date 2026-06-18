@@ -12,11 +12,15 @@ All notable changes to the Drools Formatter extension will be documented in this
 - `declare` block support with indented fields and annotations
 - `modify` block formatting with inner spaces (distinct from compact `update`/`insert` style)
 - DRL keyword spacing for `not`, `exists`, `forall`, `accumulate`, `collect`, `eval` (`not(X)` becomes `not (X)`)
-- Top-level construct handling (`package`, `import`, `global` always at zero indent)
+- Top-level construct handling (`package`, `unit`, `import`, `global` always at zero indent)
 - Comment preservation — `//` and `/* */` content is no longer modified by spacing rules
 - Consecutive blank line collapsing
 - Recognition of all standard rule attributes (`no-loop`, `lock-on-active`, `agenda-group`, etc.)
-- Nine new test suites covering all additions
+- Multi-line parenthesized continuation indentation in `when`/`query` blocks
+- Method chain (`.method()`) continuation indentation in `then` blocks
+- Nested-parenthesis-aware constructor formatting (`new Foo($x.getBar())` stays compact)
+- Closing `)` on its own line aligns with the opening pattern, not the continuation level
+- Twelve new test suites covering all additions
 
 ## [0.2.3] - 2025-12-08
 
