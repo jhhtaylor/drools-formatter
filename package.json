@@ -85,12 +85,14 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "echo no-lint",
-    "test": "node ./out/test/keywords.test.js && node ./out/test/spacing.test.js && node ./out/test/attributes.test.js && node ./out/test/query.test.js && node ./out/test/indentation.test.js && node ./out/test/comments.test.js && node ./out/test/operators.test.js && node ./out/test/toplevel.test.js && node ./out/test/function.test.js && node ./out/test/declare.test.js && node ./out/test/modify.test.js && node ./out/test/blanklines.test.js && node ./out/test/drl-keywords.test.js && node ./out/test/binding.test.js && node ./out/test/continuation.test.js && node ./out/test/unit-toplevel.test.js && node ./out/test/constructor.test.js && node ./out/test/production-patterns.test.js"
+    "test": "node ./out/test/keywords.test.js && node ./out/test/spacing.test.js && node ./out/test/attributes.test.js && node ./out/test/query.test.js && node ./out/test/indentation.test.js && node ./out/test/comments.test.js && node ./out/test/operators.test.js && node ./out/test/toplevel.test.js && node ./out/test/function.test.js && node ./out/test/declare.test.js && node ./out/test/modify.test.js && node ./out/test/blanklines.test.js && node ./out/test/drl-keywords.test.js && node ./out/test/binding.test.js && node ./out/test/continuation.test.js && node ./out/test/unit-toplevel.test.js && node ./out/test/constructor.test.js && node ./out/test/production-patterns.test.js",
+    "publish:all": "bash scripts/publish.sh"
   },
   "devDependencies": {
     "@types/node": "^24.0.10",
     "@types/vscode": "^1.80.0",
     "eslint": "^8.57.0",
+    "ovsx": "^1.0.2",
     "ts-loader": "^9.5.1",
     "typescript": "^5.8.3",
     "webpack": "^5.91.0",
